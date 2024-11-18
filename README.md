@@ -6,11 +6,9 @@ Calculates the optimal subnet CIDRs for a network. Uses [`cidr-calc`](https://gi
 
 ### CLI:
 
-```sh
-pnpm start --needed-blocks=9 --cidr='10.113.0.0/16'
-```
+```console
+$ pnpm start --needed-blocks=9 --cidr='10.113.0.0/16'
 
-```
 Network IP range: 10.113.0.0 - 10.113.255.255
 Total IPs in network: 65,536
 Theoretical max IPs per subnet: 7,281
