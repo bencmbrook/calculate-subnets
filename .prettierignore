@@ -1,0 +1,7 @@
+.next
+pnpm-lock.yaml
+*.svg
+node_modules
+.depcheckrc
+tmp/
+dist

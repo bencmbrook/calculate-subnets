@@ -1,0 +1,54 @@
+{
+  "name": "todo",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "TODO",
+  "license": "UNLICENSED",
+  "main": "./dist/cjs/index.cjs",
+  "types": "./dist/cjs/index.d.cts",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    "import": {
+      "types": "./dist/esm/index.d.ts",
+      "default": "./dist/esm/index.js"
+    },
+    "require": {
+      "types": "./dist/cjs/index.d.cts",
+      "default": "./dist/cjs/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "del dist && rollup -c",
+    "start": "tsx src/main.ts",
+    "test": "tsx --test test/**.test.ts",
+    "lint": "concurrently -c auto \"pnpm:lint:*\"",
+    "lint:prettier": "prettier --check . --log-level warn",
+    "lint:types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.57.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/eslint": "^8.56.12",
+    "@types/eslint__eslintrc": "^2.1.2",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "~20.11.30",
+    "concurrently": "^8.2.2",
+    "del-cli": "^5.1.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-unicorn": "^51.0.1",
+    "prettier": "^3.3.3",
+    "rollup": "^4.24.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^7.18.0"
+  },
+  "packageManager": "pnpm@8.12.0+sha1.7134f9b8d0b70bc7a1954f47af52123cd2b2acce"
+}

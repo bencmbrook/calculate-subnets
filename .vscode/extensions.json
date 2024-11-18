@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "vscode-icons-team.vscode-icons",
+    "wayou.vscode-todo-highlight",
+    "tamasfe.even-better-toml"
+  ]
+}
