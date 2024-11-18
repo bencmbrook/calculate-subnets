@@ -35,6 +35,8 @@ Number of used IPs:   36,864 (56.25%)
 ### JS:
 
 ```ts
+import { uniformlyDistributedSubnets } from 'calculate-subnets';
+
 const { cidrBlocks } = uniformlyDistributedSubnets({
   neededBlocks: 9,
   cidr: '10.113.0.0/16',

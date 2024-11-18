@@ -1,20 +1,20 @@
 {
   "name": "calculate-subnets",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TODO",
   "license": "UNLICENSED",
   "bin": "./dist/cli/calculate-subnets.cjs",
   "main": "./dist/cjs/index.cjs",
-  "types": "./dist/cjs/index.d.cts",
+  "types": "./dist/cjs/src/main.d.ts",
   "module": "./dist/esm/index.js",
   "exports": {
     "import": {
-      "types": "./dist/esm/index.d.ts",
+      "types": "./dist/esm/src/main.d.ts",
       "default": "./dist/esm/index.js"
     },
     "require": {
-      "types": "./dist/cjs/index.d.cts",
+      "types": "./dist/cjs/src/main.d.ts",
       "default": "./dist/cjs/index.cjs"
     }
   },

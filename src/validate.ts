@@ -23,7 +23,6 @@ export function validate({
   } catch {
     throw new TypeError(`Invalid CIDR provided: ${cidr}`);
   }
-  console.info(`Network IP range: ${parentCidr.toIpRange().toString()}`);
 
   if (
     typeof availableSpace !== 'number' ||
