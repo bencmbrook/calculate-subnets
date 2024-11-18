@@ -1,10 +1,10 @@
 {
-  "name": "subnet-cidr-calculator",
-  "private": true,
+  "name": "calculate-subnets",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "TODO",
   "license": "UNLICENSED",
+  "bin": "./dist/cli/calculate-subnets.cjs",
   "main": "./dist/cjs/index.cjs",
   "types": "./dist/cjs/index.d.cts",
   "module": "./dist/esm/index.js",
@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "del dist && rollup -c",
-    "start": "tsx src/cli.ts",
+    "start": "tsx bin/cli.ts",
     "test": "tsx --test test/**.test.ts",
     "lint": "concurrently -c auto \"pnpm:lint:*\"",
     "lint:prettier": "prettier --check . --log-level warn",

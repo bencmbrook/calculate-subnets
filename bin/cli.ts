@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { parseArgs } from 'node:util';
 import { IpRange } from 'cidr-calc';
-import { uniformlyDistributedSubnets } from './uniformly-distributed-subnets.js';
+import { uniformlyDistributedSubnets } from '../src/uniformly-distributed-subnets.js';
 
 /**
  * @example

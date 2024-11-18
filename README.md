@@ -1,4 +1,4 @@
-# CIDR Calculator
+# Calculate Subnet CIDRs
 
 Calculates the optimal subnet CIDRs for a network. Uses [`cidr-calc`](https://github.com/arineng/cidr-calc) for IP ranges.
 
@@ -7,7 +7,7 @@ Calculates the optimal subnet CIDRs for a network. Uses [`cidr-calc`](https://gi
 ### CLI:
 
 ```console
-$ pnpm start --needed-blocks=9 --cidr='10.113.0.0/16'
+$ npx calculate-subnets --needed-blocks=9 --cidr='10.113.0.0/16'
 
 Network IP range: 10.113.0.0 - 10.113.255.255
 Total IPs in network: 65,536

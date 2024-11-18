@@ -9,5 +9,5 @@
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["src", "bin"]
 }

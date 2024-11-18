@@ -4,5 +4,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["src", "test", "./*.config.js"]
+  "include": ["src", "bin", "test", "./*.config.js"]
 }
