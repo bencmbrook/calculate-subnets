@@ -1,4 +1,4 @@
 export interface UniformlyDistributedSubnetsArguments {
-  neededBlocks: number;
+  neededSubnets: number;
   cidr: string;
 }

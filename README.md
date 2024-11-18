@@ -7,16 +7,16 @@ Split a CIDR into the largest possible subnet CIDRs. Uses [`cidr-calc`](https://
 ### CLI:
 
 ```console
-$ npx calculate-subnets --needed-blocks=9 --cidr='10.113.0.0/16'
+$ npx calculate-subnets --needed-subnets=9 --cidr='10.113.0.0/16'
 
 Network IP range: 10.113.0.0 - 10.113.255.255
 Total IPs in network: 65,536
 Theoretical max IPs per subnet: 7,281
 
-Subnets' CIDR number: /20
+Subnets' optimal CIDR number: /20
 Max IPs per subnet: 4,096
 
-CIDR blocks:
+Subnet CIDR blocks:
 Subnet 1: 10.113.0.0/20      (IP range: 10.113.0.0 - 10.113.15.255)
 Subnet 2: 10.113.16.0/20     (IP range: 10.113.16.0 - 10.113.31.255)
 Subnet 3: 10.113.32.0/20     (IP range: 10.113.32.0 - 10.113.47.255)
@@ -37,12 +37,12 @@ Number of used IPs:   36,864 (56.25%)
 ```ts
 import { uniformlyDistributedSubnets } from 'calculate-subnets';
 
-const { cidrBlocks } = uniformlyDistributedSubnets({
-  neededBlocks: 9,
+const { subnetCidrs } = uniformlyDistributedSubnets({
+  neededSubnets: 9,
   cidr: '10.113.0.0/16',
 });
 
-for (const cidrBlock of cidrBlocks) {
-  console.log(cidrBlock.toString());
+for (const subnetCidr of subnetCidrs) {
+  console.log(subnetCidr.toString());
 }
 ```

@@ -3,7 +3,7 @@ import { Cidr, IpAddress } from 'cidr-calc';
 import { UniformlyDistributedSubnetsArguments } from './types.js';
 
 export function validate({
-  neededBlocks,
+  neededSubnets,
   cidr,
 }: UniformlyDistributedSubnetsArguments): {
   parentCidr: Cidr;
@@ -36,17 +36,17 @@ export function validate({
   }
 
   if (
-    typeof neededBlocks !== 'number' ||
-    Number.isNaN(neededBlocks) ||
-    !Number.isInteger(neededBlocks) ||
-    neededBlocks < 1
+    typeof neededSubnets !== 'number' ||
+    Number.isNaN(neededSubnets) ||
+    !Number.isInteger(neededSubnets) ||
+    neededSubnets < 1
   ) {
-    throw new TypeError(`Expected "neededBlocks" to be a positive integer.`);
+    throw new TypeError(`Expected "neededSubnets" to be a positive integer.`);
   }
 
-  if (neededBlocks > 2 ** availableSpace) {
+  if (neededSubnets > 2 ** availableSpace) {
     throw new TypeError(
-      `The number of blocks needed (${neededBlocks.toLocaleString()}) exceeds the available space in the parent CIDR block (${(2 ** availableSpace).toLocaleString()})`,
+      `The number of subnets needed (${neededSubnets.toLocaleString()}) exceeds the available space in the parent CIDR block (${(2 ** availableSpace).toLocaleString()})`,
     );
   }
   return {

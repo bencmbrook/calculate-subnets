@@ -12,11 +12,11 @@ import { validate } from '../src/validate.js';
  */
 function main() {
   const {
-    values: { ['needed-blocks']: neededBlocksRaw, cidr: cidrRaw },
+    values: { ['needed-subnets']: neededSubnetsRaw, cidr: cidrRaw },
   } = parseArgs({
     options: {
       /** How many subnets you want in the network */
-      ['needed-blocks']: {
+      ['needed-subnets']: {
         type: 'string',
         short: 'n',
       },
@@ -31,17 +31,17 @@ function main() {
   });
 
   assert(
-    neededBlocksRaw !== undefined,
-    'Missing argument: --neededBlocks (or -n for short)',
+    neededSubnetsRaw !== undefined,
+    'Missing argument: --neededSubnets (or -n for short)',
   );
-  const neededBlocks = Number(neededBlocksRaw);
+  const neededSubnets = Number(neededSubnetsRaw);
   const cidr = cidrRaw ?? '0.0.0.0/16';
   if (!cidrRaw) {
     console.warn('WARNING: No CIDR provided, defaulting to', cidr, '\n');
   }
 
   try {
-    validate({ neededBlocks, cidr });
+    validate({ neededSubnets, cidr });
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Input error:', error.message);
@@ -56,7 +56,7 @@ function main() {
     maxIpsPerSubnet,
     parentCidr,
   } = uniformlyDistributedSubnets({
-    neededBlocks,
+    neededSubnets,
     cidr,
   });
 
@@ -67,14 +67,14 @@ function main() {
     `Total IPs in network: ${ipsInAvailableSpace.toLocaleString()}`,
   );
   console.debug(
-    `Theoretical max IPs per subnet: ${Math.floor(2 ** availableSpace / neededBlocks).toLocaleString()}`,
+    `Theoretical max IPs per subnet: ${Math.floor(2 ** availableSpace / neededSubnets).toLocaleString()}`,
   );
   console.info('');
   console.info(
     `Subnets' optimal CIDR number: /${optimalSubnetCidrPrefixLength.toString()}`,
   );
   console.info(`Max IPs per subnet: ${maxIpsPerSubnet.toLocaleString()}`);
-  console.info(`\nCIDR blocks:`);
+  console.info(`\nSubnet CIDR blocks:`);
   for (const [index, cidr] of subnetCidrs.entries()) {
     const range = cidr.toIpRange();
     console.info(
@@ -84,7 +84,7 @@ function main() {
   }
   console.info('');
 
-  const usedIps = maxIpsPerSubnet * neededBlocks;
+  const usedIps = maxIpsPerSubnet * neededSubnets;
   const unusedIps = ipsInAvailableSpace - usedIps;
   const percentageUsed = (usedIps / ipsInAvailableSpace) * 100;
   const lastCidr = subnetCidrs.at(-1);
