@@ -46,6 +46,7 @@ function main() {
     });
 
   const ipsInAvailableSpace = 2 ** availableSpace;
+  console.info(`Network IP range: ${parentCidr.toIpRange().toString()}`);
   console.debug(
     `Total IPs in network: ${ipsInAvailableSpace.toLocaleString()}`,
   );
@@ -69,7 +70,7 @@ function main() {
   const unusedIps = ipsInAvailableSpace - usedIps;
   const percentageUsed = (usedIps / ipsInAvailableSpace) * 100;
   const lastCidr = cidrBlocks.at(-1);
-  if (lastCidr) {
+  if (lastCidr && unusedIps) {
     console.info(
       `Unused IP range: ${new IpRange(lastCidr.toIpRange().endIpAddr.next(), parentCidr.toIpRange().endIpAddr).toString()}`,
     );

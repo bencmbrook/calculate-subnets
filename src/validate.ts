@@ -19,7 +19,7 @@ export function validate({
         Number.isInteger(Number(cidrNumberRaw)),
     );
     parentCidr = new Cidr(IpAddress.of(ipRaw), Number(cidrNumberRaw));
-    availableSpace = Number(cidrNumberRaw);
+    availableSpace = 32 - Number(cidrNumberRaw);
   } catch {
     throw new TypeError(`Invalid CIDR provided: ${cidr}`);
   }
@@ -28,7 +28,7 @@ export function validate({
     typeof availableSpace !== 'number' ||
     Number.isNaN(neededBlocks) ||
     !Number.isInteger(availableSpace) ||
-    availableSpace < 1 ||
+    availableSpace < 0 ||
     availableSpace > 32
   ) {
     throw new TypeError(
@@ -41,10 +41,10 @@ export function validate({
     Number.isNaN(neededBlocks) ||
     !Number.isInteger(neededBlocks) ||
     neededBlocks < 1 ||
-    neededBlocks > 2 ** availableSpace / 2
+    neededBlocks > 2 ** availableSpace
   ) {
     throw new TypeError(
-      `Expected "neededBlocks" to be a positive integer between 1 and ${(2 ** availableSpace / 2).toLocaleString()} (which is 2^availableSpace / 2)`,
+      `Expected "neededBlocks" to be a positive integer between 1 and ${(2 ** availableSpace).toLocaleString()} (which is 2^(32-cidrNumber))`,
     );
   }
 
