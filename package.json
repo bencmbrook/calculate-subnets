@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "del dist && rollup -c",
-    "start": "tsx src/main.ts",
+    "start": "tsx src/cli.ts",
     "test": "tsx --test test/**.test.ts",
     "lint": "concurrently -c auto \"pnpm:lint:*\"",
     "lint:prettier": "prettier --check . --log-level warn",
@@ -50,5 +50,8 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^7.18.0"
   },
-  "packageManager": "pnpm@8.12.0+sha1.7134f9b8d0b70bc7a1954f47af52123cd2b2acce"
+  "packageManager": "pnpm@8.12.0+sha1.7134f9b8d0b70bc7a1954f47af52123cd2b2acce",
+  "dependencies": {
+    "cidr-calc": "^1.0.4"
+  }
 }

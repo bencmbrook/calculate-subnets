@@ -1,5 +1,3 @@
-# typescript-template
+# CIDR Calculator
 
-Starter template for TypeScript projects
-
-tsx, Node 20, ESLint, Prettier
+Calculates the largest number of subnets available in an IP range. Uses [`cidr-calc`](https://github.com/arineng/cidr-calc) for IP ranges.
