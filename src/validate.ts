@@ -1,9 +1,30 @@
+import assert from 'node:assert';
+import { Cidr, IpAddress } from 'cidr-calc';
 import { UniformlyDistributedSubnetsArguments } from './types.js';
 
 export function validate({
   neededBlocks,
-  availableSpace,
-}: UniformlyDistributedSubnetsArguments) {
+  cidr,
+}: UniformlyDistributedSubnetsArguments): {
+  parentCidr: Cidr;
+  availableSpace: number;
+} {
+  let parentCidr: Cidr;
+  let availableSpace: number;
+  try {
+    const [ipRaw, cidrNumberRaw] = cidr.split('/');
+    assert(typeof ipRaw === 'string');
+    assert(
+      typeof cidrNumberRaw === 'string' &&
+        Number.isInteger(Number(cidrNumberRaw)),
+    );
+    parentCidr = new Cidr(IpAddress.of(ipRaw), Number(cidrNumberRaw));
+    availableSpace = Number(cidrNumberRaw);
+  } catch {
+    throw new TypeError(`Invalid CIDR provided: ${cidr}`);
+  }
+  console.info(`Network IP range: ${parentCidr.toIpRange().toString()}`);
+
   if (
     typeof availableSpace !== 'number' ||
     Number.isNaN(neededBlocks) ||
@@ -12,7 +33,7 @@ export function validate({
     availableSpace > 32
   ) {
     throw new TypeError(
-      'Expected "availableSpace" to be a positive integer between 1 and 32, representing the number of available bits in the parent CIDR block',
+      'Expected `cidr` number to be a positive integer between 1 and 32, representing the number of available bits in the parent CIDR block',
     );
   }
 
@@ -27,4 +48,9 @@ export function validate({
       `Expected "neededBlocks" to be a positive integer between 1 and ${(2 ** availableSpace / 2).toLocaleString()} (which is 2^availableSpace / 2)`,
     );
   }
+
+  return {
+    parentCidr,
+    availableSpace,
+  };
 }

@@ -1,4 +1,5 @@
-import { Cidr, IpAddress, IpRange } from 'cidr-calc';
+import { Cidr, IpRange } from 'cidr-calc';
+import { UniformlyDistributedSubnetsArguments } from './types.js';
 import { validate } from './validate.js';
 
 /**
@@ -6,16 +7,15 @@ import { validate } from './validate.js';
  */
 export function uniformlyDistributedSubnets({
   neededBlocks,
-  availableSpace,
-}: {
-  neededBlocks: number;
-  availableSpace: number;
-}): {
+  cidr,
+}: UniformlyDistributedSubnetsArguments): {
+  cidrBlocks: Cidr[];
   cidrNumber: number;
   maxIpsPerBlock: number;
-  cidrBlocks: Cidr[];
+  availableSpace: number;
+  parentCidr: Cidr;
 } {
-  validate({ neededBlocks, availableSpace });
+  const { parentCidr, availableSpace } = validate({ neededBlocks, cidr });
 
   /**
    * Where x is the CIDR number
@@ -40,19 +40,21 @@ export function uniformlyDistributedSubnets({
 
   // Get the actual CIDR blocks needed
   const cidrBlocks: Cidr[] = [];
-  let cidr: Cidr;
-  let range: IpRange;
-  let nextStartIpAddr: IpAddress = IpAddress.of('0.0.0.0');
+  let currentCidr: Cidr;
+  let currentRange: IpRange;
+  let nextStartIpAddr = parentCidr.toIpRange().startIpAddr;
   for (let index = 0; index < neededBlocks; index++) {
-    cidr = new Cidr(nextStartIpAddr, cidrNumber);
-    range = cidr.toIpRange();
-    cidrBlocks.push(cidr);
-    nextStartIpAddr = range.endIpAddr.next();
+    currentCidr = new Cidr(nextStartIpAddr, cidrNumber);
+    currentRange = currentCidr.toIpRange();
+    cidrBlocks.push(currentCidr);
+    nextStartIpAddr = currentRange.endIpAddr.next();
   }
 
   return {
+    cidrBlocks,
     cidrNumber,
     maxIpsPerBlock,
-    cidrBlocks,
+    availableSpace,
+    parentCidr,
   };
 }
