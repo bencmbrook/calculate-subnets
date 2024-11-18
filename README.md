@@ -1,6 +1,6 @@
 # Calculate Subnet CIDRs
 
-Calculates the optimal subnet CIDRs for a network. Uses [`cidr-calc`](https://github.com/arineng/cidr-calc) for IP ranges.
+Split a CIDR into the largest possible subnet CIDRs. Uses [`cidr-calc`](https://github.com/arineng/cidr-calc) for IP ranges.
 
 ## Usage
 

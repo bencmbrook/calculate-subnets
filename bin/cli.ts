@@ -2,6 +2,7 @@ import assert from 'node:assert';
 import { parseArgs } from 'node:util';
 import { IpRange } from 'cidr-calc';
 import { uniformlyDistributedSubnets } from '../src/uniformly-distributed-subnets.js';
+import { validate } from '../src/validate.js';
 
 /**
  * @example
@@ -39,12 +40,27 @@ function main() {
     console.warn('WARNING: No CIDR provided, defaulting to', cidr, '\n');
   }
 
-  const { cidrBlocks, cidrNumber, maxIpsPerBlock, availableSpace, parentCidr } =
-    uniformlyDistributedSubnets({
-      neededBlocks,
-      cidr,
-    });
+  try {
+    validate({ neededBlocks, cidr });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      console.error('Input error:', error.message);
+      return;
+    }
+    throw error;
+  }
 
+  const {
+    subnetCidrs,
+    optimalSubnetCidrPrefixLength,
+    maxIpsPerSubnet,
+    parentCidr,
+  } = uniformlyDistributedSubnets({
+    neededBlocks,
+    cidr,
+  });
+
+  const availableSpace = 32 - parentCidr.prefixLen;
   const ipsInAvailableSpace = 2 ** availableSpace;
   console.info(`Network IP range: ${parentCidr.toIpRange().toString()}`);
   console.debug(
@@ -54,10 +70,12 @@ function main() {
     `Theoretical max IPs per subnet: ${Math.floor(2 ** availableSpace / neededBlocks).toLocaleString()}`,
   );
   console.info('');
-  console.info(`Subnets' CIDR number: /${cidrNumber.toString()}`);
-  console.info(`Max IPs per subnet: ${maxIpsPerBlock.toLocaleString()}`);
+  console.info(
+    `Subnets' optimal CIDR number: /${optimalSubnetCidrPrefixLength.toString()}`,
+  );
+  console.info(`Max IPs per subnet: ${maxIpsPerSubnet.toLocaleString()}`);
   console.info(`\nCIDR blocks:`);
-  for (const [index, cidr] of cidrBlocks.entries()) {
+  for (const [index, cidr] of subnetCidrs.entries()) {
     const range = cidr.toIpRange();
     console.info(
       `Subnet ${(index + 1).toString()}: ${cidr.toString()}`.padEnd(28) +
@@ -66,10 +84,10 @@ function main() {
   }
   console.info('');
 
-  const usedIps = maxIpsPerBlock * neededBlocks;
+  const usedIps = maxIpsPerSubnet * neededBlocks;
   const unusedIps = ipsInAvailableSpace - usedIps;
   const percentageUsed = (usedIps / ipsInAvailableSpace) * 100;
-  const lastCidr = cidrBlocks.at(-1);
+  const lastCidr = subnetCidrs.at(-1);
   if (lastCidr && unusedIps) {
     console.info(
       `Unused IP range: ${new IpRange(lastCidr.toIpRange().endIpAddr.next(), parentCidr.toIpRange().endIpAddr).toString()}`,

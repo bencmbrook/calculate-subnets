@@ -7,7 +7,6 @@ export function validate({
   cidr,
 }: UniformlyDistributedSubnetsArguments): {
   parentCidr: Cidr;
-  availableSpace: number;
 } {
   let parentCidr: Cidr;
   let availableSpace: number;
@@ -19,14 +18,14 @@ export function validate({
         Number.isInteger(Number(cidrNumberRaw)),
     );
     parentCidr = new Cidr(IpAddress.of(ipRaw), Number(cidrNumberRaw));
-    availableSpace = 32 - Number(cidrNumberRaw);
+    availableSpace = 32 - parentCidr.prefixLen;
   } catch {
     throw new TypeError(`Invalid CIDR provided: ${cidr}`);
   }
 
   if (
     typeof availableSpace !== 'number' ||
-    Number.isNaN(neededBlocks) ||
+    Number.isNaN(availableSpace) ||
     !Number.isInteger(availableSpace) ||
     availableSpace < 0 ||
     availableSpace > 32
@@ -40,16 +39,17 @@ export function validate({
     typeof neededBlocks !== 'number' ||
     Number.isNaN(neededBlocks) ||
     !Number.isInteger(neededBlocks) ||
-    neededBlocks < 1 ||
-    neededBlocks > 2 ** availableSpace
+    neededBlocks < 1
   ) {
-    throw new TypeError(
-      `Expected "neededBlocks" to be a positive integer between 1 and ${(2 ** availableSpace).toLocaleString()} (which is 2^(32-cidrNumber))`,
-    );
+    throw new TypeError(`Expected "neededBlocks" to be a positive integer.`);
   }
 
+  if (neededBlocks > 2 ** availableSpace) {
+    throw new TypeError(
+      `The number of blocks needed (${neededBlocks.toLocaleString()}) exceeds the available space in the parent CIDR block (${(2 ** availableSpace).toLocaleString()})`,
+    );
+  }
   return {
     parentCidr,
-    availableSpace,
   };
 }
